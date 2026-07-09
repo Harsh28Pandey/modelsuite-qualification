@@ -30,7 +30,7 @@ const AdminDashboard = () => {
   const loadTasks = async () => {
     try {
       const { data } = await fetchAllTasks();
-      setTasks(data);
+      setTasks(data.tasks || []);  // Safely access the tasks array from the paginated object response
     } catch {
       alert('Failed to load tasks');
     }

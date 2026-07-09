@@ -6,12 +6,28 @@ const User = require('../models/User');
 // @access Admin
 const getAllTasks = async (req, res) => {
   try {
+    // Sanitize input query parameters to avoid negative values or edge-case zeros
+    const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+    const limit = Math.max(1, parseInt(req.query.limit, 10) || 10);
+    const skip = (page - 1) * limit;
+
+    // Run count count parallelly if optimization is needed later, but standard count works for now
+    const totalTasks = await Task.countDocuments({});
+
     const tasks = await Task.find({})
       .populate('assignedTo', 'name email')
       .populate('createdBy', 'name')
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
 
-    res.json(tasks);
+    // Format response structure with pagination metadata required by frontend tables
+    res.json({
+      tasks,
+      page,
+      pages: Math.ceil(totalTasks / limit),
+      totalTasks
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
