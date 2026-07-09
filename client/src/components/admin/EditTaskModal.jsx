@@ -1,22 +1,31 @@
-﻿import { useState } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { updateTask, fetchTalents } from '../../api/tasks';
 
 const STATUS_OPTIONS = ['Open', 'Claimed', 'Submitted', 'Approved', 'Rejected'];
 const inputCls = 'w-full bg-bg-input border border-border rounded-lg px-3.5 py-2.5 text-sm text-text-primary outline-none placeholder:text-[#4e4a6e] focus:border-primary focus:ring-[3px] focus:ring-primary/15 transition-all font-sans resize-y';
 const labelCls = 'text-[11px] font-semibold uppercase tracking-[0.5px] text-text-muted';
 
+// Helper to safely format raw ISO strings to YYYY-MM-DD required by input types
+const formatInputDate = (dateString) => {
+  if (!dateString) return '';
+  return dateString.split('T')[0];
+};
+
 const EditTaskModal = ({ task, onClose, onUpdated }) => {
   const [form, setForm] = useState({
-    title:       task.title       || '',
+    title: task.title || '',
     description: task.description || '',
-    status:      task.status      || 'Open',
-    assignedTo:  task.assignedTo?._id || '',
-    dueDate:     task.dueDate     || '',
+    status: task.status || 'Open',
+    assignedTo: task.assignedTo?._id || '',
+    dueDate: formatInputDate(task.dueDate),
   });
   const [talents, setTalents] = useState([]);
 
-  useState(() => {
-    fetchTalents().then(({ data }) => setTalents(data)).catch(() => {});
+  // Correct hook usage for data fetching instead of inline state misuse
+  useEffect(() => {
+    fetchTalents()
+      .then(({ data }) => setTalents(data))
+      .catch(() => { });
   }, []);
 
   const handleChange = (e) => setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
