@@ -98,6 +98,12 @@ const reviewSubmission = async (req, res) => {
     }
     // — task stays 'Submitted' even after the submission is Approved/Rejected
     // Proper flow: also update Task.status to 'Approved'/'Rejected'
+    if (submission.taskId && submission.taskId._id) {
+      // Sync parent task status with the admin's review decision
+      await Task.findByIdAndUpdate(submission.taskId._id, {
+        status: reviewStatus
+      });
+    }
 
     res.json(submission);
   } catch (error) {
