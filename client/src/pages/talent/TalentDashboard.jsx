@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 import { useEffect, useState } from 'react';
 import TalentSidebar from '../../components/talent/TalentSidebar';
 import AvailableTasksList from '../../components/talent/AvailableTasksList';

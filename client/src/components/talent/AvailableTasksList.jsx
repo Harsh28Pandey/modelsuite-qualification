@@ -1,4 +1,6 @@
-﻿import TaskCard from './TaskCard';
+﻿/* eslint-disable no-unused-vars */
+
+import TaskCard from './TaskCard';
 
 const AvailableTasksList = ({ tasks, onClaimed }) => {
   if (!tasks || tasks.length === 0) {

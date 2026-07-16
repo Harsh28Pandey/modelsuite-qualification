@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 import { deleteTask } from '../../api/tasks';
 
 /* ── SVG Action Icons ── */

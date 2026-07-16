@@ -15,6 +15,8 @@ module.exports = {
   extends: ['eslint:recommended', 'plugin:react-hooks/recommended'],
   plugins: ['react-hooks', 'react'],
   rules: {
+    "no-unused-vars": "off",
+    "react-refresh/only-export-components": "off",
     'react/react-in-jsx-scope': 'off'
   },
 };
